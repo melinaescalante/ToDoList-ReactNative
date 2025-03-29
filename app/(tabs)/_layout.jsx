@@ -1,28 +1,70 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { Redirect, Tabs } from 'expo-router'
-import { icons } from '../../constants/icons'
-const TabIcon = ({ icon, color, focused, name }) => {
+import { icons } from '../../constants'
+const TabIcon = ({ icon, color, name, focused }) => {
     return (
-        <View>
-            <Image
+        <View className=" items-center 
+    text-center gap-1 mt-7 flex-nowrap ">
+            <Image resizeMode='contain'
                 source={icon}
+                tintColor={color}
+                className={`${focused ? " w-8 h-8" : "w-7 h-7 "}  `}
             ></Image>
+            <Text className={`${focused ? "font-pbold" : "font-pregular "} text-xs  `}
+                style={{ color: color, flexWrap: 'nowrap' , width:'100%'}}>{name}</Text>
         </View>
     )
 }
 const TabsLayout = () => {
     return (
         <>
-            <Tabs>
-                <Tabs.Screen name='my-notes' options={{ title: 'My Notes', headerShown: false, tabBarIcon: ({ color, focused }) => (<TabIcon name='My Notes' focused={focused} color={color} icon={icons.notes}></TabIcon>) }}>
-                </Tabs.Screen>
-                  
-                <Tabs.Screen name='create' options={{ title: 'Create Note', headerShown: false, tabBarIcon: ({ color, focused }) => (<TabIcon name='Create Note' focused={focused} color={color} icon={icons.plus}></TabIcon>) }}>
-                </Tabs.Screen>
-
-                <Tabs.Screen name='profile' options={{ title: 'Profile', headerShown: false, tabBarIcon: ({ color, focused }) => (<TabIcon name='Profile' focused={focused} color={color} icon={icons.profile}></TabIcon>) }}>
-                </Tabs.Screen>
+            <Tabs screenOptions={{ tabBarShowLabel: false, tabBarStyle: { height: 90, alignItems: 'center', justifyContent: 'flex-center', backgroundColor:'#4a2545', } , tabBarActiveTintColor:'#90AA86', tabBarInactiveTintColor:'#E4D2DE', }}>
+                <Tabs.Screen
+                    name="my-notes"
+                    options={{
+                        title: "Notes",
+                        headerShown: false,
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.notes}
+                                color={color}
+                                name="Notes"
+                                focused={focused}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="create"
+                    options={{
+                        title: "Create",
+                        headerShown: false,
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.plus}
+                                color={color}
+                                name="Create"
+                                focused={focused}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="profile"
+                    options={{
+                        title: "Profile",
+                        headerShown: false,
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.profile}
+                                color={color}
+                                name="Profile"
+                                focused={focused}
+                            />
+                        ),
+                    }}
+                />
             </Tabs></>
     )
 }

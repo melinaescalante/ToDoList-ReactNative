@@ -16,6 +16,13 @@ module.exports = {
         pextrabold: ["Poppins-ExtraBold", "sans-serif"],
         pblack: ["Poppins-Black", "sans-serif"],
       },
+      colors:{
+        primary: "#4a2545", //violeta oscuro
+        secondary: "#E4D2DE",// violeta claro
+        tertiary: "#90AA86", // verde
+        quaternary: "#dccca3", // crema
+        quinary: "#000001",// negro
+      }
     },
   },
   plugins: [],
