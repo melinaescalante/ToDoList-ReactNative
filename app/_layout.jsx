@@ -21,6 +21,8 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null
   return <Stack className="font-pregular">
     <Stack.Screen name="index" options={{ headerShown: false }} ></Stack.Screen>
+    <Stack.Screen name="(auth)" options={{ headerShown: false }} ></Stack.Screen>
+    <Stack.Screen name="(tabs)" options={{ headerShown: false }} ></Stack.Screen>
   </Stack>;
 }
 

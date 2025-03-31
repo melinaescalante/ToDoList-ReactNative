@@ -6,12 +6,13 @@ import { Link, Redirect, router } from 'expo-router'
 import "../global.css"
 import CustomButton from '../components/CustomButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import 'react-native-url-polyfill/auto'
 export default function App() {
   return (<SafeAreaView className='bg-primary h-full'>
     <ScrollView contentContainerStyle={{ height: '100%' }}>
       <View className='w-full min-h-[85vh]  items-center my-auto max-h-full justify-center px-4'>
 
-        <Text className=' text-quaternary font-pbold text-3xl ps-1 ' style={{marginBottom:50}}>ToDoList</Text>
+        <Text className=' text-quaternary font-pbold text-3xl ps-1 ' style={{ marginBottom: 50 }}>ToDoList</Text>
         <Image source={images.todolist} resizeMode='contain' className="h-80  inset-shadow-sm inset-shadow-blue-500" ></Image>
 
         <View className='relative mt-5'>
