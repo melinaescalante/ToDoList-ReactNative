@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // NOTE: Update this to include the paths to all of your component files.
-  content: ["./app/**/*.{js,jsx,ts,tsx}"],
+  // NOTE: Update this to include the paths to all of your component files. 
+   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
@@ -17,11 +17,14 @@ module.exports = {
         pblack: ["Poppins-Black", "sans-serif"],
       },
       colors:{
-        primary: "#4a2545", //violeta oscuro
-        secondary: "#E4D2DE",// violeta claro
-        tertiary: "#90AA86", // verde
-        quaternary: "#dccca3", // crema
+        primary: "#373F51", //violeta oscuro
+        // primary: "#4a2545", //violeta oscuro
+        secondary: "#58A4B0",// violeta claro
+        tertiary: "#A9BCD0", // verde
+        quaternary: "#DAA49A", // crema
         quinary: "#000001",// negro
+        senary: "#ffffff",// blanco
+    
       }
     },
   },
