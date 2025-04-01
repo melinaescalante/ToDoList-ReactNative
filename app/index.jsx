@@ -6,7 +6,7 @@ import { Link, Redirect, router } from 'expo-router'
 import "../global.css"
 import CustomButton from '../components/CustomButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import 'react-native-url-polyfill/auto'
+// import 'react-native-url-polyfill/auto'
 export default function App() {
   return (<SafeAreaView className='bg-primary h-full'>
     <ScrollView contentContainerStyle={{ height: '100%' }}>
@@ -20,13 +20,24 @@ export default function App() {
             <Text className='text-quaternary font-pbold '> ToDoList
             </Text>
           </Text>
-          <Image source={images.path} resizeMode='contain' className=' h-[15px] absolute -bottom-1 ' style={{ tintColor: '#DAA49A', right: 35 }}>
+          <Image 
+          source={images.path} 
+          resizeMode='contain' 
+          className='right-9 h-[15px] absolute -bottom-1 ' tintColor='#DAA49A' >
 
           </Image>
         </View>
 
-        <Text className=' mt-7 text-senary text-center text-xl' style={{ margin: '20' }}>Where your organization begins  </Text>
-        <CustomButton title='Continue with email' handlePress={() => { router.push('/sign-in') }} containerStyles='w-full mt-7 min-h-[62px] bg-secondary'></CustomButton>
+        <Text
+          className=' mt-7 text-senary text-center text-xl'
+          style={{ margin: '20' }}>Where your organization begins  </Text>
+        <CustomButton
+          title='Continue with email'
+          handlePress={() => router.push("/sign-in")} containerStyles='w-full mt-7 min-h-[62px] bg-secondary'>
+
+        </CustomButton>
+
+
       </View>
     </ScrollView>
     <StatusBar backgroundColor='#373F51' style='light' />

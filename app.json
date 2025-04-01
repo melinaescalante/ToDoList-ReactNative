@@ -1,5 +1,11 @@
 {
   "expo": {
+    "jsEngine": "hermes",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "name": "react-native-escalante",
     "slug": "react-native-escalante",
     "version": "1.0.0",
@@ -16,8 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-     
-      }, "package": "com.todolist"
+      },
+      "package": "com.todolist"
     },
     "web": {
       "bundler": "metro",

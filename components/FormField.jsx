@@ -6,6 +6,7 @@ const FormField = ({ title,
     placeholder,
     handleChangeText,
     otherStyles,
+    keyboardType
 }) => {
     const [showPassword, setShowPassword] = useState(false);
     return (
@@ -13,6 +14,7 @@ const FormField = ({ title,
             <Text className='text-senary font-pmedium mb-2' >{title}</Text>
             <View className=" mt-2 flex-row w-full bg-[#2A2F3C] h-16  border-2 border-[#5C6884] px-4   focus:border-quaternary items-center rounded-2xl" >
                 <TextInput className="flex-1 text-senary font-psemibold text-base"
+                keyboardType={keyboardType}
                     value={value}
                     placeholder={placeholder}
                     placeholderTextColor="#7B7B8B"
