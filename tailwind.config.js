@@ -17,11 +17,10 @@ module.exports = {
         pblack: ["Poppins-Black", "sans-serif"],
       },
       colors:{
-        primary: "#373F51", //violeta oscuro
-        // primary: "#4a2545", //violeta oscuro
-        secondary: "#58A4B0",// violeta claro
-        tertiary: "#A9BCD0", // verde
-        quaternary: "#DAA49A", // crema
+        primary: "#373F51", //AZUL oscuro
+        secondary: "#58A4B0",// cyan
+        tertiary: "#A9BCD0", // celestito
+        quaternary: "#DAA49A", // rosita
         quinary: "#000001",// negro
         senary: "#ffffff",// blanco
     

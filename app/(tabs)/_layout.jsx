@@ -19,7 +19,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const TabsLayout = () => {
     return (
         <>
-            <Tabs screenOptions={{ tabBarShowLabel: false, tabBarStyle: { height: 90, alignItems: 'center', justifyContent: 'flex-center', backgroundColor:'#4a2545', } , tabBarActiveTintColor:'#90AA86', tabBarInactiveTintColor:'#E4D2DE', }}>
+            <Tabs screenOptions={{ tabBarShowLabel: false, tabBarStyle: { height: 90, alignItems: 'center', justifyContent: 'flex-center', backgroundColor:'#ffffff', } , tabBarActiveTintColor:'#DAA49A', tabBarInactiveTintColor:'#373F51', }}>
                 <Tabs.Screen
                     name="my-notes"
                     options={{
