@@ -6,14 +6,12 @@ import SearchInput from '../../components/SearchInput'
 import HorizontalCarrusel from '../../components/HorizontalCarrusel'
 import EmptyState from '../../components/EmptyState'
 import useAppwrite from '../../lib/useAppwrite'
-import { getAllNotes } from '../../lib/appwrite'
+import { getAllNotes, getNotesAboutToExpire } from '../../lib/appwrite'
 import NoteCard from '../../components/NoteCard'
 const MyNotes = () => {
   const { data: notes, refetch } = useAppwrite(getAllNotes)
-  notes.forEach(note => {
-    
-    console.log(note.users.avatar)
-  });
+  const { data: notesAboutToExpire } = useAppwrite(getNotesAboutToExpire)
+
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = async () => {
     setRefreshing(true)
@@ -24,7 +22,7 @@ const MyNotes = () => {
     <SafeAreaView className='justify-center bg-primary h-full'>
       <FlatList
         className='text-senary'
-        data={[]}
+        data={notes}
 
         renderItem={({ item }) => 
           (<NoteCard 
@@ -35,7 +33,7 @@ const MyNotes = () => {
         keyExtractor={(item) => item.$id}
         ListHeaderComponent={() => (
           <View
-            className='my-6 px-4 space-y-6'>
+            className='my-3 px-4 space-y-6'>
             <View
               className='justify-between items-start flex-row mb-4'>
               <View
@@ -54,7 +52,7 @@ const MyNotes = () => {
               <Text
                 className='font-pregular text-senary mb-3'>Latest Notes</Text>
               <HorizontalCarrusel
-                notes={[{ id: 1 }, { id: 2 }] ?? []}>
+                notes={notesAboutToExpire ?? []}>
 
               </HorizontalCarrusel>
             </View>

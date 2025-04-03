@@ -9,9 +9,11 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import notes from "../assets/icons/notes.png";
+import play from '../assets/icons/play.png'
 
 export default {
   notes,
+  play,
   plus,
   profile,
   leftArrow,
