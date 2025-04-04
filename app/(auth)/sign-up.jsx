@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link, router } from 'expo-router'
-import { createUser } from '../../lib/appwrite'
+import { createUser, getCurrentUser } from '../../lib/appwrite'
 import { Alert } from 'react-native'
 import {useGlobalContext} from '../../context/GlobalProvider'
 const SignUp = () => {
@@ -20,9 +20,9 @@ const SignUp = () => {
     try {
       const result = await createUser(form.email,form.password,form.username)
       setUser(result)
-    
       setIsLogged(true)
-      router.push('/my-notes')
+      router.replace('/my-notes')
+
     } catch (error) {
       Alert.alert('Error', error.message)
 

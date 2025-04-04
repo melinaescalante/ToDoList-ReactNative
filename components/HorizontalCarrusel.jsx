@@ -4,6 +4,7 @@ import { images } from '../constants'
 import * as Animatable from 'react-native-animatable'
 import { typeOfURL } from './NoteCard'
 import { formatDate } from '../functions/functions'
+import EmptyState from './EmptyState'
 const zoomOut = {
     0:
     {
@@ -90,6 +91,8 @@ const HorizontalCarrusel = ({ notes }) => {
             keyExtractor={(note) => note.$id}
             renderItem={({ item }) => (
                 <SoonerItemToExpire item={item} activeItem={activeItem}></SoonerItemToExpire>)}
+                ListEmptyComponent={() => (
+                    <EmptyState  subtitle='No reminders that expires soon'></EmptyState>)}
         />
     )
 }

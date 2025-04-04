@@ -8,10 +8,12 @@ import EmptyState from '../../components/EmptyState'
 import useAppwrite from '../../lib/useAppwrite'
 import { getAllNotes, getNotesAboutToExpire } from '../../lib/appwrite'
 import NoteCard from '../../components/NoteCard'
+import { useGlobalContext } from '../../context/GlobalProvider'
 const MyNotes = () => {
-  const { data: notes, refetch } = useAppwrite(getAllNotes)
-  const { data: notesAboutToExpire } = useAppwrite(getNotesAboutToExpire)
+  const { user, setUser, setIsLogged } = useGlobalContext()
 
+  const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
+  const { data: notesAboutToExpire } = useAppwrite(() => getNotesAboutToExpire(user.$id))
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = async () => {
     setRefreshing(true)
@@ -24,11 +26,11 @@ const MyNotes = () => {
         className='text-senary'
         data={notes}
 
-        renderItem={({ item }) => 
-          (<NoteCard 
+        renderItem={({ item }) =>
+        (<NoteCard
           note={item}
-           creator={item.users}
-            ></NoteCard>
+          creator={item.users}
+        ></NoteCard>
         )}
         keyExtractor={(item) => item.$id}
         ListHeaderComponent={() => (
@@ -42,24 +44,29 @@ const MyNotes = () => {
                   Welcome to your notes,
                 </Text>
                 <Text className='font-psemibold text-3xl text-white'>
-                  Melina
+                  {user?.username}
                 </Text>
               </View>
             </View>
             <SearchInput></SearchInput>
-            <View
-              className='w-full flex-1 pt-5 pb-8'>
-              <Text
-                className='font-pregular text-senary mb-3'>Latest Notes</Text>
-              <HorizontalCarrusel
-                notes={notesAboutToExpire ?? []}>
+            {
+              notesAboutToExpire && (
 
-              </HorizontalCarrusel>
-            </View>
+                <View
+                  className='w-full flex-1 pt-5 pb-8'>
+                  <Text
+                    className='font-pregular text-senary mb-3'>Latest Notes</Text>
+                  <HorizontalCarrusel
+                    notes={notesAboutToExpire ?? []}>
+
+                  </HorizontalCarrusel>
+                </View>
+              )
+            }
           </View>
         )}
         ListEmptyComponent={() => (
-          <EmptyState title="You're all catch up" subtitle='No reminders that expire soon'></EmptyState>)}
+          <EmptyState title="You're all catch up" subtitle='No reminders'></EmptyState>)}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>}
       />
 

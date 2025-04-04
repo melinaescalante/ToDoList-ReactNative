@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
-import { signIn } from '../../lib/appwrite'
+import { getCurrentUser, signIn } from '../../lib/appwrite'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link, router } from 'expo-router'
@@ -20,10 +20,12 @@ const SignIn = () => {
     setIsSubmitting(true)
     try {
       const result = await signIn(form.email,form.password)
-      setUser(result)
+
+      const userIn= await getCurrentUser()
+      setUser(userIn)
     
       setIsLogged(true)
-      router.push('/my-notes')
+      router.replace('/my-notes')
     } catch (error) {
       Alert.alert('Error', error.message || 'An unexpected error occurred.');
 
