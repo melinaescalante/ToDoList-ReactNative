@@ -24,7 +24,7 @@ const MyNotes = () => {
     <SafeAreaView className='justify-center bg-primary h-full'>
       <FlatList
         className='text-senary'
-        data={notes}
+        data={notes??[]}
 
         renderItem={({ item }) =>
         (<NoteCard

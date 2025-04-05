@@ -34,7 +34,6 @@ const SoonerItemToExpire = ({ activeItem, item }) => {
 
             const typeUrl = await typeOfURL(item.image)
             setUrlType(typeUrl)
-            console.log(typeUrl)
         }
         type()
     }, [])
@@ -92,7 +91,7 @@ const HorizontalCarrusel = ({ notes }) => {
             renderItem={({ item }) => (
                 <SoonerItemToExpire item={item} activeItem={activeItem}></SoonerItemToExpire>)}
                 ListEmptyComponent={() => (
-                    <EmptyState  subtitle='No reminders that expires soon'></EmptyState>)}
+                    <EmptyState   subtitle='No reminders that expires soon'></EmptyState>)}
         />
     )
 }

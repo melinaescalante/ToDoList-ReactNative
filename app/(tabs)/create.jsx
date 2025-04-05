@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import  {router}  from 'expo-router'
+import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '../../components/FormField'
@@ -14,8 +14,8 @@ import { useGlobalContext } from '../../context/GlobalProvider'
 
 const Create = () => {
   const [uploading, setUploading] = useState(false)
-  const {user,setUser}=useGlobalContext()
-  const [video, setVideo] = useState(null)
+  const { user, setUser } = useGlobalContext()
+  const [image, setImage] = useState(false)
   const [imageOrVideo, setImageOrVideo] = useState(null)
   const [form, setForm] = useState({
     title: '',
@@ -25,31 +25,39 @@ const Create = () => {
     description: null
   })
   const openPicker = async (selectType) => {
-
-    let result= await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:selectType==='image'?ImagePicker.MediaTypeOptions.Images: ImagePicker.MediaTypeOptions.Videos,
-      aspect:[4,3],
-      quality:1
+console.log(image)
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1
     })
+    console.log(result)
     if (!result.canceled) {
+      if (image === true) {
+        setForm({ ...form, image: result.assets[0] })
+        return
+      }
       if (selectType === 'image') {
         setForm({ ...form, thumbnail: result.assets[0] })
       }
       if (selectType === 'video') {
         setForm({ ...form, image: result.assets[0] })
       }
-    } 
+    }
   }
 
-  const submit =async () => {
-    if (form.title === '' || (!form.thumbnail && !form.image)) {
+  const submit = async () => {
+    if (form.title === '' || (!form.thumbnail && form.image)) {
       return Alert.alert('Please fill all the fields.')
     }
     setUploading(true)
     try {
-      await createNote({...form,userId:user.$id})
-       Alert.alert('Succes', 'Note created successfuly.')
-      
+
+
+      let noti = await createNote({ ...form, userId: user.$id })
+      console.log(noti)
+      Alert.alert('Succes', 'Note created successfuly.')
+
       router.push('/my-notes')
     } catch (error) {
       return Alert.alert('Error', error.message)
@@ -62,6 +70,8 @@ const Create = () => {
         description: null
       })
       setUploading(false)
+      setImage(false)
+      setImageOrVideo(null)
     }
   }
   return (
@@ -95,7 +105,7 @@ const Create = () => {
                 <CustomButton containerStyles='bg-tertiary m-1 flex-1' title='Image' handlePress={(() => { setImageOrVideo('Image') })}>
 
                 </CustomButton>
-                <CustomButton handlePress={(() => { setImageOrVideo('Video') })} title='Video' containerStyles='flex-1 m-1 bg-tertiary'>
+                <CustomButton handlePress={(() => { setImageOrVideo('Video'), setForm({ ...form, image: null }) })} title='Video' containerStyles='flex-1 m-1 bg-tertiary'>
 
                 </CustomButton>
               </View>
@@ -105,22 +115,37 @@ const Create = () => {
         {imageOrVideo === 'Image' ? (
           <>
             <Text className='text-senary my-2 font-pmedium'>Image:</Text>
-            <TouchableOpacity onPress={() => openPicker('image')}>
+            <TouchableOpacity onPress={() => { 
+            openPicker('image');
+            setImage(true);
+              }}>
 
-              <View
-                className='w-full h-16 gap-2 px-4 bg-black/40 rounded-xl justify-center items-center flex-row'>
-
+              {form.image && image ? (
                 <Image
-                  source={icons.upload}
-                  resizeMode='contain'
-                  className='h-5 w-5'>
+                  source={{ uri: form.image.uri }}
+                  resizeMode="cover"
+                  className="w-full h-64 rounded-2xl"
+                />
 
-                </Image>
-                <Text className='text-senary'>Choose a file</Text>
+              ) : (
+                <>
+                  <View
+                    className='w-full h-16 gap-2 px-4 bg-black/40 rounded-xl justify-center items-center flex-row'>
+                    <Image
+                      source={icons.upload}
+                      resizeMode='contain'
+                      className='h-5 w-5'>
 
-              </View>
+                    </Image>
+                    <Text className='text-senary'>Choose a file</Text>
+                  </View>
+                </>
+
+              )}
             </TouchableOpacity>
-            <CustomButton containerStyles='bg-tertiary m-1 w-[50%] my-2' textStyles='text-xs' title='Change to video' handlePress={(() => { setImageOrVideo('Video') })}></CustomButton>
+            <CustomButton containerStyles='bg-tertiary m-1 w-[50%] my-2' textStyles='text-xs' title='Change to video' handlePress={(() => {
+               setImageOrVideo('Video');
+               setImage(false); })}></CustomButton>
           </>
         ) : imageOrVideo === 'Video' && (
           <>
@@ -136,7 +161,7 @@ const Create = () => {
                   className="w-full h-64 rounded-2xl"
                   // useNativeControls
                   resizeMode={ResizeMode.COVER}
-                  // isLooping={true}
+                // isLooping={true}
                 />
               ) : (
                 <View
@@ -186,7 +211,7 @@ const Create = () => {
         <CustomButton isLoading={uploading} title='Create note'
           textStyles='text-primary ' containerStyles=' my-2 py-3 w-full bg-quaternary' handlePress={submit}></CustomButton>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   )
 }
 
