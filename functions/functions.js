@@ -11,4 +11,3 @@ export const formatDate = (datetime) => {
 };
 
 const appwriteDate = "2025-04-01T16:37:42.378+00:00";
-console.log(formatDate(appwriteDate)); // Salida: "01/04/2025 13:37" (Depende de la zona horaria)

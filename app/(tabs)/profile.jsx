@@ -1,5 +1,5 @@
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, RefreshControl, FlatList, TouchableOpacity, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { getAllNotes, SignOut } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
 import NoteCard from '../../components/NoteCard'
@@ -10,7 +10,12 @@ import { icons } from '../../constants'
 import InfoBox from '../../components/InfoBox'
 import { router } from 'expo-router'
 const Search = () => {
-
+  const [refreshing, setRefreshing] = useState(false)
+  const onRefresh = async () => {
+    setRefreshing(true)
+    await refetch()
+    setRefreshing(false)
+  }
   const { user, setUser, setIsLogged } = useGlobalContext()
   const { data: notes } = useAppwrite(() => getAllNotes(user.$id))
   const logout = async () => {
@@ -18,7 +23,7 @@ const Search = () => {
     setUser(null)
     setIsLogged(false)
     router.replace('/sign-in')
-   }
+  }
   return (
     <SafeAreaView className='justify-center bg-primary h-full'>
       <FlatList
@@ -50,7 +55,7 @@ const Search = () => {
         )}
         ListEmptyComponent={() => (
           <EmptyState subtitle="You have no notes !" title='Create one!' ></EmptyState>)}
-
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>}
       />
 
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, Image, RefreshControl } from 'react-native'
+import { View, Text, FlatList, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
@@ -57,6 +57,7 @@ const MyNotes = () => {
                   <Text
                     className='font-pregular text-senary mb-3'>Latest Notes</Text>
                   <HorizontalCarrusel
+                  
                     notes={notesAboutToExpire ?? []}>
 
                   </HorizontalCarrusel>

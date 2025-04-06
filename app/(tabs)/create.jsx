@@ -21,41 +21,48 @@ const Create = () => {
     title: '',
     datelimit: null,
     thumbnail: null,
+    video:null,
     image: null,
     description: null
   })
   const openPicker = async (selectType) => {
-console.log(image)
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
       aspect: [4, 3],
       quality: 1
     })
-    console.log(result)
     if (!result.canceled) {
-      if (image === true) {
-        setForm({ ...form, image: result.assets[0] })
-        return
+      if (imageOrVideo === 'Image') {
+        setForm({ ...form, image: result.assets[0] })  // Solo imagen (sin thumbnail)
       }
-      if (selectType === 'image') {
-        setForm({ ...form, thumbnail: result.assets[0] })
-      }
-      if (selectType === 'video') {
-        setForm({ ...form, image: result.assets[0] })
+      if (imageOrVideo === 'Video') {
+        if (selectType === 'video') {
+          setForm({ ...form, video: result.assets[0] })
+        }
+        if (selectType === 'image') {
+          setForm({ ...form, thumbnail: result.assets[0] })
+        }
       }
     }
   }
 
   const submit = async () => {
-    if (form.title === '' || (!form.thumbnail && form.image)) {
+    if (form.title === '') {
       return Alert.alert('Please fill all the fields.')
     }
+    
+    if (imageOrVideo === 'Video' && (!form.video || !form.thumbnail)) {
+      return Alert.alert('Please select both a video and a thumbnail.')
+    }
+    
+    if (imageOrVideo === 'Image' && !form.image) {
+      return Alert.alert('Please select an image.')
+    }
+    
     setUploading(true)
     try {
+      await createNote({ ...form, userId: user.$id })
 
-
-      let noti = await createNote({ ...form, userId: user.$id })
-      console.log(noti)
       Alert.alert('Succes', 'Note created successfuly.')
 
       router.push('/my-notes')
@@ -67,6 +74,7 @@ console.log(image)
         datelimit: null,
         thumbnail: null,
         image: null,
+        video:null,
         description: null
       })
       setUploading(false)
@@ -115,10 +123,10 @@ console.log(image)
         {imageOrVideo === 'Image' ? (
           <>
             <Text className='text-senary my-2 font-pmedium'>Image:</Text>
-            <TouchableOpacity onPress={() => { 
-            openPicker('image');
-            setImage(true);
-              }}>
+            <TouchableOpacity onPress={() => {
+              openPicker('image');
+              setImage(true);
+            }}>
 
               {form.image && image ? (
                 <Image
@@ -144,8 +152,9 @@ console.log(image)
               )}
             </TouchableOpacity>
             <CustomButton containerStyles='bg-tertiary m-1 w-[50%] my-2' textStyles='text-xs' title='Change to video' handlePress={(() => {
-               setImageOrVideo('Video');
-               setImage(false); })}></CustomButton>
+              setImageOrVideo('Video');
+              setImage(false);
+            })}></CustomButton>
           </>
         ) : imageOrVideo === 'Video' && (
           <>
@@ -154,9 +163,9 @@ console.log(image)
               Upload video:
             </Text>
             <TouchableOpacity onPress={() => openPicker('video')}>
-              {form.image ? (
+              {form.video ? (
                 <Video
-                  source={{ uri: form.image.uri }}
+                  source={{ uri: form.video.uri }}
                   style={{ width: '100%', height: 200, borderRadius: 20 }}
                   className="w-full h-64 rounded-2xl"
                   // useNativeControls
@@ -208,7 +217,7 @@ console.log(image)
 
           </>
         )}
-        <CustomButton isLoading={uploading} title='Create note'
+        <CustomButton isLoading={uploading} title={uploading ? 'Creating note...' : 'Create note'}
           textStyles='text-primary ' containerStyles=' my-2 py-3 w-full bg-quaternary' handlePress={submit}></CustomButton>
       </ScrollView>
     </SafeAreaView >

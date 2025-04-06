@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, Text, FlatList, RefreshControl,TouchableOpacity, Image } from 'react-native'
 import { images } from '../constants'
 import * as Animatable from 'react-native-animatable'
-import { typeOfURL } from './NoteCard'
 import { formatDate } from '../functions/functions'
 import EmptyState from './EmptyState'
 const zoomOut = {
@@ -26,17 +25,8 @@ const zoomIn = {
     }
 }
 const SoonerItemToExpire = ({ activeItem, item }) => {
-    const [urlType, setUrlType] = useState('')
 
     const [play, setPlay] = useState(false);
-    useEffect(() => {
-        const type = async () => {
-
-            const typeUrl = await typeOfURL(item.image)
-            setUrlType(typeUrl)
-        }
-        type()
-    }, [])
 
 
     return (
@@ -59,13 +49,13 @@ const SoonerItemToExpire = ({ activeItem, item }) => {
                     }
                     {
                         item.image
-                        && (
-                            urlType.includes('image') ? (
-                              <Image className='w-10 h-20  opacity-80' resizeMode='contain'  source={ images.camera } />
+                            ? (
+
+                                <Image className='w-10 h-20  opacity-80' resizeMode='contain' source={images.camera} />
                             ) : (
-                              <Image style={{borderRadius:30}} resizeMode='contain' className='w-10 h-20 opacity-80' source={images.video} />
+                                <Image style={{ borderRadius: 30 }} resizeMode='contain' className='w-10 h-20 opacity-80' source={images.video} />
                             )
-                          )
+
                     }
                 </View>
             </TouchableOpacity>
@@ -74,24 +64,33 @@ const SoonerItemToExpire = ({ activeItem, item }) => {
 }
 const HorizontalCarrusel = ({ notes }) => {
     const [activeItem, setActiveItem] = useState(notes[1])
+    const [refreshing, setRefreshing] = useState(false)
+
     const viewabaleItemsChanged = (({ viewableItems }) => {
         if (viewableItems.length > 0) {
             setActiveItem(viewableItems[0].key)
         }
     })
+    const onRefresh = async () => {
+        setRefreshing(true)
+        await refetch()
+        setRefreshing(false)
+      }
     return (
         <FlatList
             className='py-6'
             onViewableItemsChanged={viewabaleItemsChanged}
-            horizontal
+            horizontal={notes && notes.length > 0}
             data={notes}
             viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
             contentOffset={{ x: 170 }}
             keyExtractor={(note) => note.$id}
+            ListEmptyComponent={() => (
+                <EmptyState subtitle='No reminders that expires soon'></EmptyState>)}
             renderItem={({ item }) => (
                 <SoonerItemToExpire item={item} activeItem={activeItem}></SoonerItemToExpire>)}
-                ListEmptyComponent={() => (
-                    <EmptyState   subtitle='No reminders that expires soon'></EmptyState>)}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>}
+
         />
     )
 }

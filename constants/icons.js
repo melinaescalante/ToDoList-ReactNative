@@ -10,7 +10,8 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import notes from "../assets/icons/notes.png";
 import play from '../assets/icons/play.png'
-
+import trash from '../assets/icons/trash.png'
+import pencil from '../assets/icons/pencil.png'
 export default {
   notes,
   play,
@@ -24,4 +25,6 @@ export default {
   logout,
   eyeHide,
   eye,
+  trash,
+  pencil
 };
