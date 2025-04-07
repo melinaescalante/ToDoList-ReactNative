@@ -48,12 +48,12 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
 
                 {/* Primer Modal - Settings */}
                 <Modal
-                    animationType="slide"
+                    animationType='fade'
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => setModalVisible(false)}
                 >
-                    <SafeAreaView className=" items-center justify-center h-full">
+                    <SafeAreaView className=" items-center justify-center h-full bg-black/40">
                         <View >
                             <View className="bg-tertiary pt-4 pb-4 min-w-72 px-4 rounded-xl">
                                 <View className='flex-row  items-center justify-center border-b-2 py-2 border-b-secondary '>
@@ -94,18 +94,19 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
 
                 {/* Segundo Modal - Confirm Delete */}
                 <Modal
-                    animationType="slide"
+                    animationType='fade'
+
                     transparent={true}
                     visible={modalDeleteVisible}
                     onRequestClose={() => setModalDeleteVisible(false)}
                 >
-                    <SafeAreaView className='flex items-center justify-center my auto h-full'>
+                    <SafeAreaView className='flex items-center justify-center my auto h-full bg-black/40'>
                         <View >
                             <View className='bg-quaternary pt-4 pb-4 items-center justify-center min-h-56 min-w-72 gap-4  px-4 rounded-xl'>
                                 <View className='flex-row  items-center justify-center border-b-2 py-2 border-b-primary '>
-                                    <Text className='text-xl font-psemibold text-center'>Are you sure you want it to erase this note?</Text>
+                                    <Text className='text-xl font-psemibold text-center'>You sure you want to erase this note?</Text>
                                     <Pressable
-                                        className='relative left-20 '
+                                        className='relative -top-5'
                                         onPress={() => setModalDeleteVisible(!modalDeleteVisible)}>
                                         <Text className='font-pbold text-lg' >X</Text>
                                     </Pressable>

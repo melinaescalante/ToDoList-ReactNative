@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
-import { View, Text, FlatList, RefreshControl,TouchableOpacity, Image } from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, Image } from 'react-native'
 import { images } from '../constants'
 import * as Animatable from 'react-native-animatable'
 import { formatDate } from '../functions/functions'
 import EmptyState from './EmptyState'
+import { useFocusEffect } from 'expo-router'
 const zoomOut = {
     0:
     {
@@ -63,27 +64,26 @@ const SoonerItemToExpire = ({ activeItem, item }) => {
     )
 }
 const HorizontalCarrusel = ({ notes }) => {
-    const [activeItem, setActiveItem] = useState(notes[1])
+    
 
+    const [activeItem, setActiveItem] = useState(notes[0])
+    
     const viewabaleItemsChanged = (({ viewableItems }) => {
         if (viewableItems.length > 0) {
             setActiveItem(viewableItems[0].key)
         }
     })
-    const onRefresh = async () => {
-        setRefreshing(true)
-        await refetch()
-        setRefreshing(false)
-      }
+
     return (
         <FlatList
             className='py-6'
             onViewableItemsChanged={viewabaleItemsChanged}
-            horizontal={notes && notes.length > 0}
+            horizontal={notes && notes.length >= 1}
             data={notes}
             viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
-            contentOffset={{ x: 170 }}
+            contentOffset={{ x: 0 }}
             keyExtractor={(note) => note.$id}
+
             ListEmptyComponent={() => (
                 <EmptyState subtitle='No reminders that expires soon'></EmptyState>)}
             renderItem={({ item }) => (

@@ -1,5 +1,5 @@
 import { View, RefreshControl, FlatList, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { getAllNotes, SignOut } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
 import NoteCard from '../../components/NoteCard'
@@ -8,16 +8,21 @@ import EmptyState from '../../components/EmptyState'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import { icons } from '../../constants'
 import InfoBox from '../../components/InfoBox'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 const Search = () => {
   const [refreshing, setRefreshing] = useState(false)
+  const { user, setUser, setIsLogged } = useGlobalContext()
+  const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [])
+  )
   const onRefresh = async () => {
     setRefreshing(true)
     await refetch()
     setRefreshing(false)
   }
-  const { user, setUser, setIsLogged } = useGlobalContext()
-  const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
   const logout = async () => {
     await SignOut()
     setUser(null)

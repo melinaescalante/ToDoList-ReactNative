@@ -15,14 +15,17 @@ const MyNotes = () => {
   const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
   useFocusEffect(
     useCallback(() => {
+     refetchNotesAboutToExpire()
+
       refetch()
     }, [])
   )
-  const { data: notesAboutToExpire } = useAppwrite(() => getNotesAboutToExpire(user.$id))
+  const { data: notesAboutToExpire, refetch: refetchNotesAboutToExpire } = useAppwrite(() => getNotesAboutToExpire(user.$id))
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = async () => {
     setRefreshing(true)
     await refetch()
+    await refetchNotesAboutToExpire()
     setRefreshing(false)
   }
   const removeNoteDOM = async () => {
@@ -66,7 +69,7 @@ const MyNotes = () => {
                   <Text
                     className='font-pregular text-senary mb-3'>Latest Notes</Text>
                   <HorizontalCarrusel
-
+                    refresh={refetchNotesAboutToExpire}
                     notes={notesAboutToExpire ?? []}>
 
                   </HorizontalCarrusel>
