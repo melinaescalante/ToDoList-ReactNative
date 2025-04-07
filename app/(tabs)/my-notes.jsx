@@ -1,5 +1,5 @@
 import { View, Text, FlatList, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
@@ -9,10 +9,15 @@ import useAppwrite from '../../lib/useAppwrite'
 import { getAllNotes, getNotesAboutToExpire } from '../../lib/appwrite'
 import NoteCard from '../../components/NoteCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import { useFocusEffect } from 'expo-router'
 const MyNotes = () => {
   const { user, setUser, setIsLogged } = useGlobalContext()
-
   const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
+  useFocusEffect(
+    useCallback(() => {
+      refetch()
+    }, [])
+  )
   const { data: notesAboutToExpire } = useAppwrite(() => getNotesAboutToExpire(user.$id))
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = async () => {
@@ -20,16 +25,20 @@ const MyNotes = () => {
     await refetch()
     setRefreshing(false)
   }
+  const removeNoteDOM = async () => {
+    await refetch()
+  }
   return (
     <SafeAreaView className='justify-center bg-primary h-full'>
       <FlatList
         className='text-senary'
-        data={notes??[]}
+        data={notes ?? []}
 
         renderItem={({ item }) =>
         (<NoteCard
           note={item}
           creator={item.users}
+          onDeleted={removeNoteDOM}
         ></NoteCard>
         )}
         keyExtractor={(item) => item.$id}
@@ -57,7 +66,7 @@ const MyNotes = () => {
                   <Text
                     className='font-pregular text-senary mb-3'>Latest Notes</Text>
                   <HorizontalCarrusel
-                  
+
                     notes={notesAboutToExpire ?? []}>
 
                   </HorizontalCarrusel>

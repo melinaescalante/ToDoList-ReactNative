@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import { router } from 'expo-router'
-import React, { useState } from 'react'
+import { router, useLocalSearchParams } from 'expo-router'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
@@ -8,23 +8,51 @@ import { icons } from '../../constants'
 import * as ImagePicker from 'expo-image-picker'
 import { Alert } from 'react-native'
 import { ResizeMode, Video } from 'expo-av'
-import { createNote } from '../../lib/appwrite'
+import {  searchNoteById, updateNote } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
 
 
-const Create = () => {
-  const [uploading, setUploading] = useState(false)
-  const { user, setUser } = useGlobalContext()
-  const [image, setImage] = useState(false)
-  const [imageOrVideo, setImageOrVideo] = useState(null)
-  const [form, setForm] = useState({
+const Update = () => {
+  const { query } = useLocalSearchParams()
+  const [note, setNote] = useState({
     title: '',
     datelimit: null,
     thumbnail: null,
-    video:null,
+    video: null,
     image: null,
     description: null
   })
+
+  const [imageOrVideo, setImageOrVideo] = useState(null)
+  useEffect(() => {
+    const bringNote = async () => {
+
+      const result = await searchNoteById(query)
+      if (result) {
+
+        setNote({
+          title: result[0].title,
+          description: result[0].description,
+          datelimit: result[0]?.datelimit,
+          image: result[0]?.image,
+          video: result[0]?.video,
+          thumbnail: result[0]?.thumbnail,
+          id: result[0].$id
+        })
+        if (result[0]?.image) {
+          setImageOrVideo('Image')
+        } else if (result[0]?.video && result[0]?.thumbnail) {
+          setImageOrVideo('Video')
+        }
+
+      }
+    }
+    bringNote()
+  }, [])
+
+  const [uploading, setUploading] = useState(false)
+  const { user, setUser } = useGlobalContext()
+
   const openPicker = async (selectType) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
@@ -33,52 +61,51 @@ const Create = () => {
     })
     if (!result.canceled) {
       if (imageOrVideo === 'Image') {
-        setForm({ ...form, image: result.assets[0] })  // Solo imagen (sin thumbnail)
+        setNote({ ...note, image: result.assets[0] })  // Solo imagen (sin thumbnail)
       }
       if (imageOrVideo === 'Video') {
         if (selectType === 'video') {
-          setForm({ ...form, video: result.assets[0] })
+          setNote({ ...note, video: result.assets[0] })
         }
         if (selectType === 'image') {
-          setForm({ ...form, thumbnail: result.assets[0] })
+          setNote({ ...note, thumbnail: result.assets[0] })
         }
       }
     }
   }
 
   const submit = async () => {
-    if (form.title === '') {
+    if (note.title === '') {
       return Alert.alert('Please fill all the fields.')
     }
-    
-    if (imageOrVideo === 'Video' && (!form.video || !form.thumbnail)) {
+
+    if (imageOrVideo === 'Video' && (!note.video || !note.thumbnail)) {
       return Alert.alert('Please select both a video and a thumbnail.')
     }
-    
-    if (imageOrVideo === 'Image' && !form.image) {
+
+    if (imageOrVideo === 'Image' && !note.image) {
       return Alert.alert('Please select an image.')
     }
-    
+
     setUploading(true)
     try {
-      await createNote({ ...form, userId: user.$id })
+      await updateNote({...note})
 
-      Alert.alert('Succes', 'Note created successfuly.')
+      Alert.alert('Succes', 'Note updated successfuly.')
 
       router.replace('/my-notes')
     } catch (error) {
       return Alert.alert('Error', error.message)
     } finally {
-      setForm({
+      setNote({
         title: '',
         datelimit: null,
         thumbnail: null,
         image: null,
-        video:null,
+        video: null,
         description: null
       })
       setUploading(false)
-      setImage(false)
       setImageOrVideo(null)
     }
   }
@@ -86,23 +113,23 @@ const Create = () => {
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView className='px-4 my-6'>
 
-        <Text className='text-2xl text-senary font-psemibold my-6'>Create a note</Text>
+        <Text className='text-2xl text-senary font-psemibold my-6'>Update note</Text>
         <FormField
           otherStyles='mb-2'
-          handleChangeText={(e) => setForm({ ...form, title: e })} placeholder=''
+          handleChangeText={(e) => setNote({ ...note, title: e })} placeholder=''
           title='Note title:'
-          value={form.title} />
+          value={note.title} />
         <FormField
           otherStyles='mb-2'
 
-          handleChangeText={(e) => setForm({ ...form, description: e })}
+          handleChangeText={(e) => setNote({ ...note, description: e })}
           title='Description:'
-          value={form.description} />
+          value={note.description} />
         <FormField
           otherStyles='mb-2'
 
           title='Datelimit:'
-          value={form.datelimit} />
+          value={note.datelimit} />
         {
           imageOrVideo === null && (
 
@@ -113,7 +140,7 @@ const Create = () => {
                 <CustomButton containerStyles='bg-tertiary m-1 flex-1' title='Image' handlePress={(() => { setImageOrVideo('Image') })}>
 
                 </CustomButton>
-                <CustomButton handlePress={(() => { setImageOrVideo('Video'), setForm({ ...form, image: null }) })} title='Video' containerStyles='flex-1 m-1 bg-tertiary'>
+                <CustomButton handlePress={(() => { setImageOrVideo('Video'), setNote({ ...note, image: null }) })} title='Video' containerStyles='flex-1 m-1 bg-tertiary'>
 
                 </CustomButton>
               </View>
@@ -125,12 +152,12 @@ const Create = () => {
             <Text className='text-senary my-2 font-pmedium'>Image:</Text>
             <TouchableOpacity onPress={() => {
               openPicker('image');
-              setImage(true);
+
             }}>
 
-              {form.image && image ? (
+              {note.image ? (
                 <Image
-                  source={{ uri: form.image.uri }}
+                  source={{ uri: note.image }}
                   resizeMode="cover"
                   className="w-full h-64 rounded-2xl"
                 />
@@ -153,7 +180,7 @@ const Create = () => {
             </TouchableOpacity>
             <CustomButton containerStyles='bg-tertiary m-1 w-[50%] my-2' textStyles='text-xs' title='Change to video' handlePress={(() => {
               setImageOrVideo('Video');
-              setImage(false);
+
             })}></CustomButton>
           </>
         ) : imageOrVideo === 'Video' && (
@@ -163,9 +190,9 @@ const Create = () => {
               Upload video:
             </Text>
             <TouchableOpacity onPress={() => openPicker('video')}>
-              {form.video ? (
+              {note.video ? (
                 <Video
-                  source={{ uri: form.video.uri }}
+                  source={{ uri: note.video }}
                   style={{ width: '100%', height: 200, borderRadius: 20 }}
                   className="w-full h-64 rounded-2xl"
                   // useNativeControls
@@ -188,9 +215,9 @@ const Create = () => {
             </TouchableOpacity>
             <Text className='text-senary my-2 font-pmedium'>Thumbnail:</Text>
             <TouchableOpacity onPress={() => openPicker('image')}>
-              {form.thumbnail ? (
+              {note.thumbnail ? (
                 <Image
-                  source={{ uri: form.thumbnail.uri }}
+                  source={{ uri: note.thumbnail }}
                   resizeMode="cover"
                   className="w-full h-64 rounded-2xl"
                 />
@@ -217,11 +244,11 @@ const Create = () => {
 
           </>
         )}
-        <CustomButton isLoading={uploading} title={uploading ? 'Creating note...' : 'Create note'}
+        <CustomButton isLoading={uploading} title={uploading ? 'Updating note...' : 'Update note'}
           textStyles='text-primary ' containerStyles=' my-2 py-3 w-full bg-quaternary' handlePress={submit}></CustomButton>
       </ScrollView>
     </SafeAreaView >
   )
 }
 
-export default Create
+export default Update

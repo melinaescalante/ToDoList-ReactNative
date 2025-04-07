@@ -17,7 +17,7 @@ const Search = () => {
     setRefreshing(false)
   }
   const { user, setUser, setIsLogged } = useGlobalContext()
-  const { data: notes } = useAppwrite(() => getAllNotes(user.$id))
+  const { data: notes, refetch } = useAppwrite(() => getAllNotes(user.$id))
   const logout = async () => {
     await SignOut()
     setUser(null)

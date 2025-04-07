@@ -64,7 +64,6 @@ const SoonerItemToExpire = ({ activeItem, item }) => {
 }
 const HorizontalCarrusel = ({ notes }) => {
     const [activeItem, setActiveItem] = useState(notes[1])
-    const [refreshing, setRefreshing] = useState(false)
 
     const viewabaleItemsChanged = (({ viewableItems }) => {
         if (viewableItems.length > 0) {
@@ -89,7 +88,6 @@ const HorizontalCarrusel = ({ notes }) => {
                 <EmptyState subtitle='No reminders that expires soon'></EmptyState>)}
             renderItem={({ item }) => (
                 <SoonerItemToExpire item={item} activeItem={activeItem}></SoonerItemToExpire>)}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>}
 
         />
     )

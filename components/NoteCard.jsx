@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ImageBackground, Modal, Pressable, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, ImageBackground, Modal, Pressable, Alert, DevSettings } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Image } from 'react-native'
 import { icons } from '../constants'
@@ -6,29 +6,35 @@ import { formatDate } from '../functions/functions'
 import { Video, ResizeMode } from 'expo-av'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from './CustomButton'
-import { router } from 'expo-router'
-
-const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, video, Created, $id } }) => {
+import { router, } from 'expo-router'
+import { deleteNote } from '../lib/appwrite'
+import { useNavigation } from '@react-navigation/native'
+const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, video, $id }, onDeleted }) => {
     const [play, setPlay] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-    const deleteNote = () => {
+
+    const remove = async () => {
+
         try {
+            await deleteNote($id)
             setModalVisible(false)
             setModalDeleteVisible(false)
-        } catch (error) {
+            onDeleted()
+            Alert.alert('Success', 'The note was deleted successfuly.')
 
+        } catch (error) {
+            console.log(error)
         }
     }
-    const updateNote = () => {
+    const update = () => {
         try {
             setModalVisible(false)
-            router.push('/notes/update_note')
+            router.push(`/notes/${$id}`)
         } catch (error) {
-
+            console.log(error)
         }
     }
-    console.log($id)
     return (
         <View className='flex-col items-start px-4 border border-secondary p-2 py-4 rounded-lg m-2'>
             <View className='flex flex-row gap-3 items-start'>
@@ -61,7 +67,7 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
 
                                 <CustomButton
                                     icon={icons.pencil}
-                                    handlePress={updateNote}
+                                    handlePress={update}
                                     title="Update"
 
                                     textStyles='text-center'
@@ -106,10 +112,7 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
                                 </View>
 
                                 <Pressable
-                                    onPress={() => {
-                                        setModalDeleteVisible(false);
-                                        setModalVisible(false);
-                                    }}
+                                    onPress={() => remove()}
                                     className="rounded-xl flex-row justify-center items-center border w-full py-1 mt-2"
                                 >
                                     <Text className="text-xl text-center font-psemibold">Yes, I want to delete it.</Text>
@@ -126,7 +129,7 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
                                 >
                                     <Text className="text-xl text-center font-psemibold">No, I dont want to delete it.</Text>
 
-                                 
+
 
                                 </Pressable>
                             </View>
