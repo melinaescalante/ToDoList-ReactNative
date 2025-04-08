@@ -15,34 +15,34 @@ This is an project FullStack devolped with **Expo**, **React Native**, **Tailwin
 8. Note detail.
 
 ## Screenshots   
-### Onboarding screen
-![boardgin](https://github.com/user-attachments/assets/a26fdd3b-82a8-4c72-b70c-6d4ba5433c66)
 
-### Log In
-![login](https://github.com/user-attachments/assets/4db296e3-c449-4b54-9bf4-8a149f26456d)
+| Onboarding | Log In| Sign Up|
+|------------|--------|---------|
 
-### Sign Up
+![boardgin](https://github.com/user-attachments/assets/a26fdd3b-82a8-4c72-b70c-6d4ba5433c66) 
+![login](https://github.com/user-attachments/assets/4db296e3-c449-4b54-9bf4-8a149f26456d) 
 ![signup](https://github.com/user-attachments/assets/3ac81657-89ca-4efa-8827-0af45dff3bb4)
 
 
-### Profile
+
+| Profile | Notes| Create note|
+|------------|--------|---------|
+
 ![profile](https://github.com/user-attachments/assets/7438c1f5-5b89-4f9f-8001-32cadac4749b)
-### Notes
 ![notes](https://github.com/user-attachments/assets/b69cdaf3-f343-4424-a7d4-5794eac6f5a8)
-
-### Create note
 ![create](https://github.com/user-attachments/assets/589430da-4b28-4b70-b17c-b83b6a3ccdc3)
-### Update notes
 
-![update](https://github.com/user-attachments/assets/30c9d984-9775-42d9-87bf-30961e6ec44d)
 
-### Search notes
+| Search note | Update note| Setting modal|
+|------------|--------|---------|
+
 ![result](https://github.com/user-attachments/assets/978c1f43-08bd-4db6-8f6d-58b947b2eeb8)
-
-### Settings modal
+![update](https://github.com/user-attachments/assets/30c9d984-9775-42d9-87bf-30961e6ec44d)
 ![modalseting](https://github.com/user-attachments/assets/ca63ec6b-da00-4923-826a-ddab71931f0d)
 
-### Delete modal
+
+| Delete modal| 
+|------------|
 
 ![deleye](https://github.com/user-attachments/assets/91fb9a10-5af8-4828-8e30-4f45979fd71c)
 
