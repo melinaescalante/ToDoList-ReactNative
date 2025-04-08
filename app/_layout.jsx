@@ -27,7 +27,8 @@ const RootLayout = () => {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} ></Stack.Screen>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} ></Stack.Screen>
         <Stack.Screen name="search/[query]" options={{ headerShown: false }} ></Stack.Screen>
-        <Stack.Screen name="notes/[query]" options={{ headerShown: false }} ></Stack.Screen>
+        <Stack.Screen name="notes/update/[query]" options={{ headerShown: false }} ></Stack.Screen>
+        <Stack.Screen name="notes/[noteId]" options={{ headerShown: false }} ></Stack.Screen>
       </Stack>
     </GlobalProvider>);
 }

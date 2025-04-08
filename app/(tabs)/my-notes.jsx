@@ -40,7 +40,7 @@ const MyNotes = () => {
         renderItem={({ item }) =>
         (<NoteCard
           note={item}
-          creator={item.users}
+
           onDeleted={removeNoteDOM}
         ></NoteCard>
         )}
@@ -65,7 +65,7 @@ const MyNotes = () => {
               notesAboutToExpire && (
 
                 <View
-                  className='w-full flex-1 pt-5 pb-8'>
+                  className='w-full h-full flex-1 pt-5'>
                   <Text
                     className='font-pregular text-senary mb-3'>Latest Notes</Text>
                   <HorizontalCarrusel

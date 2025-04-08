@@ -1,18 +1,19 @@
-import { View, Text, TouchableOpacity, ImageBackground, Modal, Pressable, Alert, DevSettings } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, ImageBackground, Modal, Pressable, Alert } from 'react-native'
+import React, {  useState } from 'react'
 import { Image } from 'react-native'
 import { icons } from '../constants'
 import { formatDate } from '../functions/functions'
 import { Video, ResizeMode } from 'expo-av'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from './CustomButton'
-import { router, } from 'expo-router'
+import { router, usePathname, } from 'expo-router'
 import { deleteNote } from '../lib/appwrite'
 import { useNavigation } from '@react-navigation/native'
 const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, video, $id }, onDeleted }) => {
     const [play, setPlay] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+    const pathname = usePathname();
 
     const remove = async () => {
 
@@ -20,7 +21,12 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
             await deleteNote($id)
             setModalVisible(false)
             setModalDeleteVisible(false)
-            onDeleted()
+            if (pathname==='/my-notes' ||pathname==='/profile') {
+                onDeleted()
+                
+            }else if (pathname==='/'){
+
+            }
             Alert.alert('Success', 'The note was deleted successfuly.')
 
         } catch (error) {
@@ -30,7 +36,7 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
     const update = () => {
         try {
             setModalVisible(false)
-            router.push(`/notes/${$id}`)
+            router.push(`/notes/update/${$id}`)
         } catch (error) {
             console.log(error)
         }

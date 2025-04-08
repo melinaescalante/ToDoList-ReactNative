@@ -2,7 +2,7 @@ import { Image, ScrollView, Text, View } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { images } from '../constants'
-import { Link, Redirect, router } from 'expo-router'
+import {  Redirect, router } from 'expo-router'
 import "../global.css"
 import CustomButton from '../components/CustomButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
