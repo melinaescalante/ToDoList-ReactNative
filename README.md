@@ -2,7 +2,7 @@
 
 This is an project FullStack devolped with **Expo**, **React Native**, **TailwindCSS** and **Appwrite**
 
-## What you can do
+## Features
 
 1. Create notes.
 2. Read notes.
