@@ -151,7 +151,7 @@ const NoteCard = ({ note: { title, description, datelimit, thumbnail, image, vid
             </View>
 
             <View>
-                {datelimit ? <Text className=' text-senary text-md mb-2'>Datelimit : <Text className='font-psemibold'>{formatDate(datelimit)}</Text></Text> : <Text className='text-senary  mb-2'>No datelimit</Text>}
+                {datelimit ? <Text className=' text-senary text-md mt-2 mb-2'>Datelimit : <Text className='font-psemibold'>{formatDate(datelimit)}</Text></Text> : <Text className='mt-2 text-senary  mb-2'>No datelimit</Text>}
             </View>
             <View  >
                 {description && <Text className='text-senary leading-6  mb-2'>{description}</Text>}

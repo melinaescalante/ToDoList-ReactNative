@@ -19,9 +19,9 @@ const Create = () => {
   const [imageOrVideo, setImageOrVideo] = useState(null)
   const [form, setForm] = useState({
     title: '',
-    datelimit: null,
+    datelimit: '',
     thumbnail: null,
-    video:null,
+    video: null,
     image: null,
     description: null
   })
@@ -50,15 +50,15 @@ const Create = () => {
     if (form.title === '') {
       return Alert.alert('Please fill all the fields.')
     }
-    
+
     if (imageOrVideo === 'Video' && (!form.video || !form.thumbnail)) {
       return Alert.alert('Please select both a video and a thumbnail.')
     }
-    
+
     if (imageOrVideo === 'Image' && !form.image) {
       return Alert.alert('Please select an image.')
     }
-    
+
     setUploading(true)
     try {
       await createNote({ ...form, userId: user.$id })
@@ -71,10 +71,10 @@ const Create = () => {
     } finally {
       setForm({
         title: '',
-        datelimit: null,
+        datelimit: '',
         thumbnail: null,
         image: null,
-        video:null,
+        video: null,
         description: null
       })
       setUploading(false)
@@ -99,8 +99,9 @@ const Create = () => {
           title='Description:'
           value={form.description} />
         <FormField
+          keyboardType='default'
           otherStyles='mb-2'
-
+          handleChangeText={(e) => setForm({ ...form, datelimit: e })}
           title='Datelimit:'
           value={form.datelimit} />
         {

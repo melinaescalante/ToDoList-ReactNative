@@ -38,11 +38,14 @@ const MyNotes = () => {
         data={notes ?? []}
 
         renderItem={({ item }) =>
-        (<NoteCard
-          note={item}
 
+        (<>
+        <NoteCard
+          note={item}
+          
           onDeleted={removeNoteDOM}
-        ></NoteCard>
+          ></NoteCard>
+          </>
         )}
         keyExtractor={(item) => item.$id}
         ListHeaderComponent={() => (
@@ -67,12 +70,15 @@ const MyNotes = () => {
                 <View
                   className='w-full h-full flex-1 pt-5'>
                   <Text
-                    className='font-pregular text-senary mb-3'>Latest Notes</Text>
+                    className='font-pmedium text-senary mb-3'>Latest Notes</Text>
                   <HorizontalCarrusel
                     refresh={refetchNotesAboutToExpire}
                     notes={notesAboutToExpire ?? []}>
 
                   </HorizontalCarrusel>
+
+        <Text  className='font-pmedium text-senary '>Your notes</Text>
+
                 </View>
               )
             }
